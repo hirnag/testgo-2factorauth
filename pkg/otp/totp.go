@@ -31,7 +31,7 @@ func GenerateKey(accountName string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	file, _ := os.Create("QR-CODE.png")
+	file, _ := os.Create("QRCODE.png")
 	defer file.Close()
 
 	// encode the barcode as png
