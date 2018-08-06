@@ -47,6 +47,26 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:494b14f2928fb1be105e43d47aea43c6991e1d26270e17e7b940fa13e58aedd1"
+  name = "github.com/hirnag/testgo-2factorauth"
+  packages = ["pkg/authenticator/go-google-authenticator/auth"]
+  pruneopts = "UT"
+  revision = "d099c3391329cc3a64a30c4f8564269be64f17f9"
+
+[[projects]]
+  digest = "1:6c7a3f738e37a1c7ad3d56122a34932140654d51a57e01f8613cdf3eaf050911"
+  name = "github.com/pquerna/otp"
+  packages = [
+    ".",
+    "hotp",
+    "totp",
+  ]
+  pruneopts = "UT"
+  revision = "b7b89250c468c06871d3837bee02e2d5c155ae19"
+  version = "v1.0.0"
+
+[[projects]]
+  branch = "master"
   digest = "1:020d71586d1f492f88b0f1c1bf8397df63f9be2af281d85725ff6a1123691ef6"
   name = "github.com/sec51/convert"
   packages = [
@@ -108,6 +128,14 @@
   pruneopts = "UT"
   revision = "56440b844dfe139a8ac053f4ecac0b20b79058f4"
 
+[[projects]]
+  digest = "1:342378ac4dcb378a5448dd723f0784ae519383532f5e70ade24132c4c8693202"
+  name = "gopkg.in/yaml.v2"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
+  version = "v2.2.1"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -118,7 +146,10 @@
     "github.com/dgryski/dgoogauth",
     "github.com/gorilla/context",
     "github.com/gorilla/mux",
+    "github.com/hirnag/testgo-2factorauth/pkg/authenticator/go-google-authenticator/auth",
+    "github.com/pquerna/otp/totp",
     "github.com/sec51/twofactor",
+    "gopkg.in/yaml.v2",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

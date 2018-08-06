@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>QR CODE TEST</title>
+</head>
+<body>
+<p>Read QR Code which was created your local environment.</p>
+<hr />
+<form action="/Authenticate" method="post">
+	<label for="passcode">Input Pass Code</label>
+    <input type="text" name="passcode" id="passcode" value="{{.Code}}" />
+    <input type="submit" value="Verify" />
+</form>
+<b>{{.Result}}</b>
+<p style="color: red">{{.Message}}</p>
+</body>
+</html>
