@@ -20,6 +20,9 @@ func main() {
 		panic(err)
 	}
 	hotpSecret, err = otp.GenerateHOTPKey("username")
+	if err != nil {
+		panic(err)
+	}
 
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/Authenticate", authenticate)
