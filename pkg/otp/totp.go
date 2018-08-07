@@ -24,7 +24,7 @@ func GenerateTOTPKey(accountName string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	fmt.Printf("%+v\n", key)
+	fmt.Println(key.String())
 
 	// create the output file
 	qrCode, err := key.Image(180, 180)
