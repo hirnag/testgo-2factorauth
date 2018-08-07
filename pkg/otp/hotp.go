@@ -5,22 +5,20 @@ import (
 	"image/png"
 	"os"
 
-	"time"
-
 	"github.com/pquerna/otp"
-	"github.com/pquerna/otp/totp"
+	"github.com/pquerna/otp/hotp"
 )
 
-func newTOTPOpts(accountName string) totp.GenerateOpts {
-	return totp.GenerateOpts{
+func newHOTPOpts(accountName string) hotp.GenerateOpts {
+	return hotp.GenerateOpts{
 		Issuer:      "hirnag",
 		AccountName: accountName,
 	}
 }
 
-func GenerateTOTPKey(accountName string) (string, error) {
-	opts := newTOTPOpts(accountName)
-	key, err := totp.Generate(opts)
+func GenerateHOTPKey(accountName string) (string, error) {
+	opts := newHOTPOpts(accountName)
+	key, err := hotp.Generate(opts)
 	if err != nil {
 		return "", err
 	}
@@ -31,7 +29,7 @@ func GenerateTOTPKey(accountName string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	file, _ := os.Create("QR_TOTP.png")
+	file, _ := os.Create("QR_HOTP.png")
 	defer file.Close()
 
 	// encode the barcode as png
@@ -40,14 +38,13 @@ func GenerateTOTPKey(accountName string) (string, error) {
 	return key.Secret(), nil
 }
 
-func VerifyTOTPToken(passcode string, secret string) (bool, error) {
-	return totp.ValidateCustom(
+func VerifyHOTPToken(passcode string, counter uint64, secret string) (bool, error) {
+	fmt.Printf("hotp counter: %v\n", counter)
+	return hotp.ValidateCustom(
 		passcode,
+		counter,
 		secret,
-		time.Now().UTC(),
-		totp.ValidateOpts{
-			Period:    30,
-			Skew:      1,
+		hotp.ValidateOpts{
 			Digits:    otp.DigitsSix,
 			Algorithm: otp.AlgorithmSHA1,
 		},

@@ -9,14 +9,17 @@ import (
 )
 
 var templates = template.Must(template.ParseFiles("templates/index.html"))
-var secret string
+var totpSecret string
+var hotpSecret string
+var hotpCounter uint64 = 1
 
 func main() {
 	var err error
-	secret, err = otp.GenerateKey("username")
+	totpSecret, err = otp.GenerateTOTPKey("username")
 	if err != nil {
 		panic(err)
 	}
+	hotpSecret, err = otp.GenerateHOTPKey("username")
 
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/Authenticate", authenticate)
@@ -34,18 +37,45 @@ func indexHandler(res http.ResponseWriter, req *http.Request) {
 }
 
 func authenticate(res http.ResponseWriter, req *http.Request) {
+	data := map[string]interface{}{}
+	defer func() {
+		if err := templates.Execute(res, data); err != nil {
+			panic(err)
+		}
+	}()
+
+	// ParseForm
 	req.ParseForm()
 	fmt.Println(req.Form)
+	if len(req.Form["passcode"]) == 0 {
+		data["Message"] = "Invalid parameter, must be input pass code."
+		return
+	}
+	passcode := req.Form["passcode"][0]
+	data["Code"] = passcode
+	if len(req.Form["algorithm"]) == 0 {
+		data["Message"] = "Invalid parameter, must be select algorithm."
+		return
+	}
+	algorithm := req.Form["algorithm"][0]
 
 	// Verify Pass Code
-	result, err := otp.VerifyToken(req.Form["passcode"][0], secret)
-	fmt.Println(result)
-	data := map[string]interface{}{"Code": req.Form["passcode"][0], "Result": result}
+	var result bool
+	var err error
+	switch algorithm {
+	case "totp":
+		result, err = otp.VerifyTOTPToken(passcode, totpSecret)
+		break
+	case "hotp":
+		result, err = otp.VerifyHOTPToken(passcode, hotpCounter, hotpSecret)
+		if result {
+			hotpCounter++
+		}
+		break
+	}
 	if err != nil {
 		data["Message"] = err.Error()
 	}
-
-	if err := templates.Execute(res, data); err != nil {
-		panic(err)
-	}
+	data["Result"] = result
+	fmt.Println(result)
 }

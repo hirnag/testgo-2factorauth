@@ -8,9 +8,11 @@
 <p>Read QR Code which was created your local environment.</p>
 <hr />
 <form action="/Authenticate" method="post">
+	<p><input type="radio" name="algorithm" value="totp" />Time-based One-time Password</p>
+	<p><input type="radio" name="algorithm" value="hotp" />HMAC-based One-time Password</p>
 	<label for="passcode">Input Pass Code</label>
     <input type="text" name="passcode" id="passcode" value="{{.Code}}" />
-    <input type="submit" value="Verify" />
+	<p><input type="submit" value="Verify" /></p>
 </form>
 <b>{{.Result}}</b>
 <p style="color: red">{{.Message}}</p>
